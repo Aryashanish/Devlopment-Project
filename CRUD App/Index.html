@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <title>Add Notes</title>
+</head>
+
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">Add Notes</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="#">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Features</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <div class="container mt-5 col-6">
+            <div class="input-group mb-3">
+                <input id="input_value" type="text" class="form-control" placeholder="Chapter Add"
+                    aria-label="Recipient's username" aria-describedby="button-addon2">
+                <button id="add_btn" class="btn btn-outline-success" type="button" id="button-addon2">Add
+                    Chapter</button>
+            </div>
+
+            <ul id="parentList" class="list-group">
+                <li class="list-group-item d-flex justify-content-between">
+                    <h3 class="flex-grow-1">Chapter 1</h3>
+                    <button class="btn btn-warning mx-3" onclick="editChapter(this)">Edit</button>
+                    <button class="btn btn-danger " onclick="removeChapter(this)">Remove</button>
+                </li>
+            </ul>
+        </div>
+
+
+    </main>
+</body>
+<script>
+    const addBtn = document.getElementById('add_btn');
+    let parentList = document.getElementById('parentList');
+    addBtn.addEventListener('click', addChapter);
+
+    function addChapter(e) {
+
+        if (parentList.children[0].className == "emptyMsg") {
+            parentList.children[0].remove();
+        }
+        //Method - 1 Get Text
+        // let currentBtn = e.currentTarget;
+        // let currentInput = currentBtn.previousElementSibling;
+        // console.log(currentInput.value);
+        //Method - 2
+        let currInput = document.getElementById('input_value');
+        // console.log(currInput.value);
+        let inputValue = currInput.value;
+
+        let newList = document.createElement('li');
+        // newList.classList.add('list-group-item')
+        newList.className = 'list-group-item d-flex justify-content-between';
+        newList.innerHTML = `
+        <h3 class="flex-grow-1"> ${inputValue} </h3>
+                    <button class="btn btn-warning mx-3" onclick="editChapter(this)">Edit</button>
+                    <button class="btn btn-danger " onclick="removeChapter(this)">Remove</button> `
+
+
+        parentList.appendChild(newList);
+    }
+
+    function removeChapter(currElement) {
+        currElement.parentElement.remove();
+        let parentList = document.getElementById('parentList');
+        if (parentList.children.length <= 0) {
+            let newEmptyMsg = document.createElement('h3');
+            newEmptyMsg.classList.add('emptyMsg');
+            // newEmptyMsg.className = 'text-center';
+            newEmptyMsg.textContent = "Nothing is here , Please Add Chapter";
+
+            parentList.appendChild(newEmptyMsg);
+        }
+    }
+
+    function editChapter(currElement) {
+        if (currElement.textContent == "Done") {
+            currElement.textContent = "Edit";
+            let currChapterName = currElement.previousElementSibling.value;
+
+            let currHeading = document.createElement('h3');
+            currHeading.className = "flex-grow-1";
+            currHeading.textContent = currChapterName;
+
+            currElement.parentElement.replaceChild(currHeading, currElement.previousElementSibling);
+        } 
+        else {
+            currElement.textContent = "Done";
+            let currChapterName = currElement.previousElementSibling.textContent;
+
+            let currInputedit = document.createElement('input');
+
+            currInputedit.type = "text";
+            currInputedit.placeholder = "Chapter Name";
+            currInputedit.className = "form-control";
+            currInputedit.value = currChapterName;
+
+            currElement.parentElement.replaceChild(currInputedit, currElement.previousElementSibling);
+
+        }
+    }
+
+</script>
+
+</html>
